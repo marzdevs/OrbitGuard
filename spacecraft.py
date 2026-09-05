@@ -33,3 +33,4 @@ for tick in range(10):
 
 # should see 10 lines print out, one second at a time, showing the battery dropping from 100.0 down to 95.0
 
+# Assignment 3 now add
