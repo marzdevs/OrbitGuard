@@ -1,36 +1,69 @@
 import time
 
-# 1. This is a dictionary storing the satellite's state
+# ==========================================
+# 1. INITIALIZATION (Set up starting state)
+# ==========================================
 satellite = {
     "battery": 100.0,
     "temp": 20.0,
-    "heater_on": False
+    "heater_on": False,
+    "pointing": 0
 }
 
-# 2. This loop will run 10 times (10 ticks)
+# ==========================================
+# 2. THE SIMULATION LOOP (10 Ticks)
+# ==========================================
 for tick in range(10):
-    # 3. subtract 0.5 from the battery each tick so it changes
-    # 1. Temperature: +1.5°C per tick if heater is ON; -0.5°C if OFF.
+
+    # ------------------------------------------
+    # STEP A: Operator Command Input & Parsing
+    # ------------------------------------------
+    command = input("Enter a command: ")
+    pointer = command.split()
+
+    if len(pointer) == 2:
+        if pointer[0] == "point":
+            satellite["pointing"] = int(pointer[1])
+            # Note: Used single quotes for 'pointing' to avoid print syntax error!
+            print(f"Setting pointing angle to {satellite['pointing']}!")
+
+        elif pointer[0] == "heater":
+            setting = pointer[1]
+            if setting == "on":
+                satellite["heater_on"] = True
+                print("Heater turned ON!")
+
+            elif setting == "off":
+                satellite["heater_on"] = False
+                print("Heater turned OFF!")
+
+        else:
+            print("Invalid heater setting! Use 'on' or 'off'.")
+
+    else:
+        # pressing Enter to let time pass!
+        print("You didn't type anything")
+
+    # ------------------------------------------
+    # STEP B: Spacecraft Physics (Update temp & battery)
+    # ------------------------------------------
+    # Calculations run using the freshly updated states from Step A
     if satellite["heater_on"] == True:
         satellite["temp"] += 1.5
-        # 2. Battery: -0.1% per tick naturally; -0.5% per tick if heater is ON.
-        satellite["battery"] -= 0.5 # heavy drain when heater is on
+        satellite["battery"] -= 0.5
     else:
         satellite["temp"] -= 0.5
-        # 2. Battery: -0.1% per tick naturally; -0.5% per tick if heater is ON.
-        satellite["battery"] -= 0.1 # light drain when heater is off
+        satellite["battery"] -= 0.1
 
-    # 3. Dead State: If battery hits 0, print failure message and stop loop.
+    # ------------------------------------------
+    # STEP C: Safety Check (Critical Boundaries)
+    # ------------------------------------------
     if satellite["battery"] <= 0:
         print("ALERT: BATTERY DEPLETED! Satellite is shutting down.")
         break
 
-    # 4. Print the tick number and the current state
+    # ------------------------------------------
+    # STEP D: Telemetry Output & Simulation Pause
+    # ------------------------------------------
     print(f"Tick {tick}: battery = {satellite['battery']:.1f}%, temp = {satellite['temp']:.1f}°C")
-
-    # 5. Pause the program for 1 second before looping again
     time.sleep(1)
-
-# should see 10 lines print out, one second at a time, showing the battery dropping from 100.0 down to 95.0
-
-# Assignment 3 now add
