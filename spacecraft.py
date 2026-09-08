@@ -7,7 +7,8 @@ satellite = {
     "battery": 100.0,
     "temp": 20.0,
     "heater_on": False,
-    "pointing": 0
+    "pointing": 0,
+    "mode": "NOMINAL"
 }
 
 # ==========================================
