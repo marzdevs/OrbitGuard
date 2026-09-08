@@ -38,8 +38,11 @@ for tick in range(10):
             # Grab the setting ("on" or "off") at index [1]
             setting = pointer[1]
             if setting == "on":
-                satellite["heater_on"] = True
-                print("Heater turned ON!")
+                if satellite["mode"] == "NOMINAL":
+                    satellite["heater_on"] = True
+                    print("Heater turned ON!")
+                else:
+                    print("COMMAND REJECTED: Heater cannot be turned ON in SAFE mode!")
 
             elif setting == "off":
                 satellite["heater_on"] = False
