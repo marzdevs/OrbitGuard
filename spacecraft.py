@@ -25,9 +25,13 @@ for tick in range(10):
     if len(pointer) == 2:
         # Check index [0] for the command action
         if pointer[0] == "point":
-            # Grab the angle at index [1]
-            satellite["pointing"] = int(pointer[1])
-            print(f"Setting pointing angle to {satellite['pointing']}!")
+
+            # TASK 1: Check if in NOMINAL mode before updating pointing
+            if satellite["mode"] == "NOMINAL":
+                satellite["pointing"] = int(pointer[1])
+                print(f"Setting pointing angle to {satellite['pointing']}!")
+            else:
+                print("COMMAND REJECTED: Pointing disabled in SAFE mode!")
 
         # Check index [0] for the command action
         elif pointer[0] == "heater":
@@ -43,6 +47,18 @@ for tick in range(10):
             else:
                 print("Invalid heater setting! Use 'on' or 'off'.")
 
+        elif pointer[0] == "mode":
+            setting = pointer[1]
+            if setting == "safe":
+                satellite["mode"] = "SAFE"
+                print("WARNING: Satellite entering SAFE mode!")
+
+            elif setting == "nominal":
+                satellite["mode"] = "NOMINAL"
+                print("Satellite returning to NOMINAL operations.")
+            else:
+                print("Invalid mode! Use 'safe' or 'nominal'.")
+
         else:
             print("Unknown command! Use 'point <angle>' or 'heater <on/off>'.")
 
@@ -53,6 +69,10 @@ for tick in range(10):
     # ------------------------------------------
     # STEP B: Spacecraft Physics (Update temp & battery)
     # ------------------------------------------
+    # TASK 2 (Option B): Physics Override keeps the heater off automatically in SAFE mode
+    if satellite["mode"] == "SAFE":
+        satellite["heater_on"] = False
+
     if satellite["heater_on"] == True:
         satellite["temp"] += 1.5
         satellite["battery"] -= 0.5

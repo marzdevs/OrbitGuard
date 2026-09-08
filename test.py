@@ -15,7 +15,7 @@ pointer = command2.split()
 
 if len(pointer) == 2:
     if pointer[0] == "point":
-        satellite["pointing"] = pointer[1]
+        number = pointer[1]
         print(f"Setting pointing angle to {number}!")
     else:
         print("Unknown action!")
