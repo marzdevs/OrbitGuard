@@ -8,19 +8,15 @@ satellite = {
     "temp": 20.0,
     "heater_on": False,
     "pointing": 0,
-    "mode": "NOMINAL"
+    "mode": "NOMINAL",
 }
 
-# ==========================================
-# 2. THE SIMULATION LOOP (10 Ticks)
-# ==========================================
-for tick in range(10):
 
-    # ------------------------------------------
-    # STEP A: Operator Command Input & Parsing
-    # ------------------------------------------
-    command = input("Enter a command: ")
-    pointer = command.split()
+# ------------------------------------------
+# STEP A: Operator Command Input & Parsing
+# ------------------------------------------
+def apply_command(command_message, satellite):
+    pointer = command_message.lower().split()
 
     if len(pointer) == 2:
         # Check index [0] for the command action
@@ -28,8 +24,11 @@ for tick in range(10):
 
             # TASK 1: Check if in NOMINAL mode before updating pointing
             if satellite["mode"] == "NOMINAL":
-                satellite["pointing"] = int(pointer[1])
-                print(f"Setting pointing angle to {satellite['pointing']}!")
+                try:
+                    satellite["pointing"] = int(pointer[1])
+                    print(f"Setting pointing angle to {satellite['pointing']}!")
+                except ValueError:
+                    print("Invalid pointing angle! Please enter a valid number.")
             else:
                 print("COMMAND REJECTED: Pointing disabled in SAFE mode!")
 
@@ -61,18 +60,24 @@ for tick in range(10):
                 print("Satellite returning to NOMINAL operations.")
             else:
                 print("Invalid mode! Use 'safe' or 'nominal'.")
-
         else:
-            print("Unknown command! Use 'point <angle>' or 'heater <on/off>'.")
+            print(
+                "Unknown command! Use 'point <angle>', 'heater <on/off>', or 'mode safe/nominal'."
+            )
+
+    elif len(pointer) == 0:
+        print("No command, time passes.")
 
     else:
-        # pressing Enter to let time pass!
-        print("You didn't type anything")
+        print("Invalid format! Commands are two words, ex: 'heater on'.")
 
-    # ------------------------------------------
-    # STEP B: Spacecraft Physics (Update temp & battery)
-    # ------------------------------------------
-    # TASK 2 (Option B): Physics Override keeps the heater off automatically in SAFE mode
+
+# ------------------------------------------
+# STEP B: Spacecraft Physics (Update temp & battery)
+# ------------------------------------------
+# TASK 2 (Option B): Physics Override keeps the heater off automatically in SAFE mode
+def update_physics(satellite):
+
     if satellite["mode"] == "SAFE":
         satellite["heater_on"] = False
 
@@ -83,15 +88,29 @@ for tick in range(10):
         satellite["temp"] -= 0.5
         satellite["battery"] -= 0.1
 
-    # ------------------------------------------
+
+# ------------------------------------------
+# STEP D: Telemetry Output & Simulation Pause
+# ------------------------------------------
+def print_telemetry(satellite, tick):
+    print(
+        f"Tick {tick}: battery = {satellite['battery']:.1f}%, temp = {satellite['temp']:.1f}°C, heater_on = {satellite['heater_on']}, pointing = {satellite['pointing']}°, mode = {satellite['mode']}"
+    )
+
+
+for tick in range(10):
+    # STEP A: Operator Command Input & Parsing
+    command_message = input("Enter command (or press Enter to skip): ")
+    apply_command(command_message, satellite)
+
+    # STEP B: Spacecraft Physics (Update temp & battery)
+    update_physics(satellite)
+
     # STEP C: Safety Check (Critical Boundaries)
-    # ------------------------------------------
     if satellite["battery"] <= 0:
         print("ALERT: BATTERY DEPLETED! Satellite is shutting down.")
         break
 
-    # ------------------------------------------
     # STEP D: Telemetry Output & Simulation Pause
-    # ------------------------------------------
-    print(f"Tick {tick}: battery = {satellite['battery']:.1f}%, temp = {satellite['temp']:.1f}°C")
+    print_telemetry(satellite, tick)
     time.sleep(1)
