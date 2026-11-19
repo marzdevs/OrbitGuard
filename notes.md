@@ -81,26 +81,26 @@ Main loop, each tick: read input → `apply_command` → `update_physics` → ba
 
 All tests passed.
 
-| #   | Input                           | Expected                                           | Result                     |
-| --- | ------------------------------- | -------------------------------------------------- | -------------------------- |
-| 1   | _(Enter)_                       | "No command, time passes"; temp −0.5, battery −0.1 | ✅                         |
-| 2   | `heater on`                     | Temp +1.5, battery −0.5                            | ✅                         |
-| 3   | `HEATER OFF`                    | Works (not case-sensitive)                         | ✅                         |
-| 4   | `point 15`                      | Pointing = 15°                                     | ✅                         |
-| 5   | `point -20`                     | Pointing = −20°                                    | ✅                         |
-| 6   | `point abc`                     | Rejected; pointing stays −20°                      | ✅                         |
-| 7   | `mode safe` (heater on)         | Heater forced off the same tick                    | ✅                         |
-| 8   | `heater on` in SAFE             | Rejected                                           | ✅                         |
-| 9   | `point 30` in SAFE              | Rejected; pointing unchanged                       | ✅                         |
-| 10  | `point abc` in SAFE             | SAFE rejection shown first                         | ✅                         |
-| 11  | `heater off` in SAFE            | Allowed                                            | ✅                         |
-| 12  | `mode nominal`, then `point 30` | Back to NOMINAL; pointing = 30°                    | ✅                         |
-| 13  | `hello`                         | "Invalid format"                                   | ✅                         |
-| 14  | `hello world`                   | "Unknown command"                                  | ✅                         |
-| 15  | `point 15 20`                   | "Invalid format"                                   | ✅                         |
-| 16  | `mode sleep`                    | "Invalid mode"                                     | ✅                         |
-| 17  | `heater maybe`                  | "Invalid heater setting"                           | ✅                         |
-| 18  | Battery 1.0 + `heater on`       | Shutdown alert; loop stops                         | ✅ (run before committing) |
+| #   | Input                           | Expected                                           | Result |
+| --- | ------------------------------- | -------------------------------------------------- | ------ |
+| 1   | _(Enter)_                       | "No command, time passes"; temp −0.5, battery −0.1 | ✅     |
+| 2   | `heater on`                     | Temp +1.5, battery −0.5                            | ✅     |
+| 3   | `HEATER OFF`                    | Works (not case-sensitive)                         | ✅     |
+| 4   | `point 15`                      | Pointing = 15°                                     | ✅     |
+| 5   | `point -20`                     | Pointing = −20°                                    | ✅     |
+| 6   | `point abc`                     | Rejected; pointing stays −20°                      | ✅     |
+| 7   | `mode safe` (heater on)         | Heater forced off the same tick                    | ✅     |
+| 8   | `heater on` in SAFE             | Rejected                                           | ✅     |
+| 9   | `point 30` in SAFE              | Rejected; pointing unchanged                       | ✅     |
+| 10  | `point abc` in SAFE             | SAFE rejection shown first                         | ✅     |
+| 11  | `heater off` in SAFE            | Allowed                                            | ✅     |
+| 12  | `mode nominal`, then `point 30` | Back to NOMINAL; pointing = 30°                    | ✅     |
+| 13  | `hello`                         | "Invalid format"                                   | ✅     |
+| 14  | `hello world`                   | "Unknown command"                                  | ✅     |
+| 15  | `point 15 20`                   | "Invalid format"                                   | ✅     |
+| 16  | `mode sleep`                    | "Invalid mode"                                     | ✅     |
+| 17  | `heater maybe`                  | "Invalid heater setting"                           | ✅     |
+| 18  | Battery 1.0 + `heater on`       | Shutdown alert; loop stops                         | ✅     |
 
 ---
 
